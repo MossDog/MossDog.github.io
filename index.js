@@ -1,16 +1,34 @@
-console.log("Index.js running...")
+console.log("Index.js running...");
+//localStorage.removeItem('theme') //Use to simulate new user with no storage
 
 const themeSwitchElement = document.getElementById("theme-switch");
 const logoElement = document.getElementById("logo");
-const imgSrc = "http://ec2-34-201-67-49.compute-1.amazonaws.com/public/images/"
 
-// Define the logo assets for light and dark modes
-darkLogo = "logoDark.png"
-lightLogo = "logoLight.png"
+// Define the logo assets for dark (sunset) and light (aqua) modes
+const darkLogo = "assets/logoDark.png";
+const lightLogo = "assets/logoLight.png";
 
-// Event listener to toggle the logo on theme switch
+// Check for saved theme preference in localStorage
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme) {
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  themeSwitchElement.checked = savedTheme === "sunset";
+  logoElement.src = savedTheme === "sunset" ? darkLogo : lightLogo;
+} else {
+  // Default to dark theme (sunset) if no preference is saved
+  document.documentElement.setAttribute("data-theme", "sunset");
+  logoElement.src = darkLogo;
+}
+
+function updateTheme(newTheme) {
+  document.documentElement.setAttribute("data-theme", newTheme);
+  localStorage.setItem("theme", newTheme);
+  logoElement.src = newTheme === "sunset" ? darkLogo : lightLogo;
+}
+
+// Event listener to toggle the theme and logo
 themeSwitchElement.addEventListener("change", () => {
-  logoElement.src = imgSrc + (themeSwitchElement.checked ? darkLogo : lightLogo);
+  const newTheme = themeSwitchElement.checked ? "sunset" : "aqua";
+  updateTheme(newTheme);
 });
-
 
